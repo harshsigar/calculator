@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+  <!-- SEO & Meta Tags -->
+  <title>Modern Calculator | Standard &amp; Scientific</title>
+  <meta name="title" content="Modern Calculator | Standard &amp; Scientific" />
+  <meta name="description" content="A sleek, modern, responsive web calculator with Standard &amp; Scientific modes, calculation history, keyboard shortcuts, and sound effects." />
+  <meta name="author" content="Harsh Sigar" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Modern Calculator | Standard &amp; Scientific" />
+  <meta property="og:description" content="A modern web calculator with Standard &amp; Scientific modes, calculation history, and glassmorphism UI." />
+  <meta property="og:image" content="./assets/preview.svg" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg" />
+
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="./css/style.css" />
+</head>
+<body>
+
+  <!-- Ambient Glowing Background -->
+  <div class="ambient-glow glow-1" aria-hidden="true"></div>
+  <div class="ambient-glow glow-2" aria-hidden="true"></div>
+
+  <!-- Calculator Chassis -->
+  <main class="calculator-app" role="application" aria-label="Scientific and Standard Calculator">
+    
+    <!-- Top Header Bar -->
+    <header class="calc-header">
+      <div class="calc-brand">
+        <span class="brand-dot"></span>
+        <span>calc<span style="color: #38bdf8;">.io</span></span>
+      </div>
+
+      <!-- Mode Switcher -->
+      <div class="mode-switcher" role="tablist">
+        <button class="mode-btn active" data-mode="standard" role="tab" aria-selected="true">Standard</button>
+        <button class="mode-btn" data-mode="scientific" role="tab" aria-selected="false">Scientific</button>
+      </div>
+
+      <!-- Control Action Icons -->
+      <div class="header-actions">
+        <!-- Sound Toggle -->
+        <button class="icon-btn" id="soundToggle" title="Toggle Sound Feedback" aria-label="Toggle Sound">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          </svg>
+        </button>
+
+        <!-- History Drawer Button -->
+        <button class="icon-btn" id="historyToggle" title="Calculation History" aria-label="View History">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 14 14"></polyline>
+          </svg>
+        </button>
+
+        <!-- Theme Toggle (Dark / Light) -->
+        <button class="icon-btn" id="themeToggle" title="Toggle Theme" aria-label="Toggle Dark/Light Mode">
+          <!-- Moon -->
+          <svg class="moon-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+          <!-- Sun -->
+          <svg class="sun-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Display Screen -->
+    <section class="calc-display">
+      <div class="display-meta">
+        <div class="meta-badges">
+          <button class="meta-badge active" id="degRadBadge" title="Click to toggle Degree / Radian mode">DEG</button>
+          <span class="meta-badge" id="memBadge" style="display: none;">M</span>
+        </div>
+        <button class="copy-btn" id="copyBtn" title="Copy result to clipboard">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span>Copy</span>
+        </button>
+      </div>
+
+      <!-- Expression Trace Line -->
+      <div class="expression-line" id="exprDisplay" aria-live="polite"></div>
+
+      <!-- Main Result Line -->
+      <div class="result-line" id="resultDisplay" aria-live="assertive">0</div>
+    </section>
+
+    <!-- Keypad Body -->
+    <section class="calc-body">
+      <!-- Memory Row -->
+      <div class="memory-row">
+        <button class="mem-btn" id="memClear" data-action="mc">MC</button>
+        <button class="mem-btn" id="memRecall" data-action="mr">MR</button>
+        <button class="mem-btn" data-action="mplus">M+</button>
+        <button class="mem-btn" data-action="mminus">M−</button>
+        <button class="mem-btn" data-action="ms">MS</button>
+      </div>
+
+      <!-- Grids Container -->
+      <div class="keypad-container">
+        
+        <!-- Scientific Functions Grid (Expanded in Scientific mode) -->
+        <div class="scientific-grid" aria-label="Scientific Keys">
+          <button class="key key-fn" data-action="fn" data-val="sin">sin</button>
+          <button class="key key-fn" data-action="fn" data-val="cos">cos</button>
+          <button class="key key-fn" data-action="fn" data-val="tan">tan</button>
+
+          <button class="key key-fn" data-action="fn" data-val="asin">sin⁻¹</button>
+          <button class="key key-fn" data-action="fn" data-val="acos">cos⁻¹</button>
+          <button class="key key-fn" data-action="fn" data-val="atan">tan⁻¹</button>
+
+          <button class="key key-fn" data-action="fn" data-val="sq">x²</button>
+          <button class="key key-fn" data-action="fn" data-val="cube">x³</button>
+          <button class="key key-fn" data-action="fn" data-val="pow">xʸ</button>
+
+          <button class="key key-fn" data-action="fn" data-val="sqrt">√x</button>
+          <button class="key key-fn" data-action="fn" data-val="cbrt">∛x</button>
+          <button class="key key-fn" data-action="fn" data-val="fact">n!</button>
+
+          <button class="key key-fn" data-action="fn" data-val="ln">ln</button>
+          <button class="key key-fn" data-action="fn" data-val="log">log₁₀</button>
+          <button class="key key-fn" data-action="fn" data-val="recip">¹/x</button>
+
+          <button class="key key-fn" data-action="fn" data-val="tenpow">10ˣ</button>
+          <button class="key key-fn" data-action="fn" data-val="epow">eˣ</button>
+          <button class="key key-fn" data-action="fn" data-val="abs">|x|</button>
+
+          <button class="key key-fn" data-action="const" data-val="pi">π</button>
+          <button class="key key-fn" data-action="const" data-val="e">e</button>
+          <button class="key key-fn" data-action="op" data-val="%">%</button>
+        </div>
+
+        <!-- Standard Numeric & Arithmetic Keypad -->
+        <div class="standard-grid" aria-label="Standard Calculator Keys">
+          <!-- Row 1 -->
+          <button class="key key-danger" data-action="clear" title="All Clear (Esc)">AC</button>
+          <button class="key key-fn" data-action="del" title="Delete Last (Backspace)">⌫</button>
+          <button class="key key-fn" data-action="op" data-val="(">(</button>
+          <button class="key key-fn" data-action="op" data-val=")">)</button>
+
+          <!-- Row 2 -->
+          <button class="key key-num" data-action="num" data-val="7">7</button>
+          <button class="key key-num" data-action="num" data-val="8">8</button>
+          <button class="key key-num" data-action="num" data-val="9">9</button>
+          <button class="key key-op" data-action="op" data-val="÷">÷</button>
+
+          <!-- Row 3 -->
+          <button class="key key-num" data-action="num" data-val="4">4</button>
+          <button class="key key-num" data-action="num" data-val="5">5</button>
+          <button class="key key-num" data-action="num" data-val="6">6</button>
+          <button class="key key-op" data-action="op" data-val="×">×</button>
+
+          <!-- Row 4 -->
+          <button class="key key-num" data-action="num" data-val="1">1</button>
+          <button class="key key-num" data-action="num" data-val="2">2</button>
+          <button class="key key-num" data-action="num" data-val="3">3</button>
+          <button class="key key-op" data-action="op" data-val="−">−</button>
+
+          <!-- Row 5 -->
+          <button class="key key-fn" data-action="plusminus">±</button>
+          <button class="key key-num" data-action="num" data-val="0">0</button>
+          <button class="key key-num" data-action="num" data-val=".">.</button>
+          <button class="key key-op" data-action="op" data-val="+">+</button>
+
+          <!-- Row 6: Equals -->
+          <button class="key key-equal key-span-2" style="grid-column: span 4;" data-action="equals">=</button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Slide-out Calculation History Drawer -->
+    <aside class="history-drawer" id="historyDrawer" aria-label="Calculation History">
+      <div class="drawer-header">
+        <h3 class="drawer-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 14 14"></polyline>
+          </svg>
+          <span>History</span>
+        </h3>
+        <button class="icon-btn" id="closeHistory" aria-label="Close History">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="history-list" id="historyList">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <div class="drawer-footer">
+        <button class="clear-btn" id="clearHistoryBtn">Clear History</button>
+      </div>
+    </aside>
+
+  </main>
+
+  <!-- App Footer / Hint -->
+  <footer class="app-footer">
+    <p>
+      Keyboard support: <span class="kbd-badge">0-9</span> <span class="kbd-badge">+ - * /</span> <span class="kbd-badge">Enter (=)</span> <span class="kbd-badge">Backspace</span> <span class="kbd-badge">Esc (AC)</span>
+    </p>
+    <p style="margin-top: 6px;">
+      Built by <a href="../portfolio/index.html">Harsh Sigar</a> &bull; B.Tech CSE
+    </p>
+  </footer>
+
+  <!-- Toast Notification Container -->
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <!-- JavaScript Engine -->
+  <script src="./js/calculator.js"></script>
+</body>
+</html>
+
